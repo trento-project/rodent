@@ -1,4 +1,5 @@
 module mr-stringer/rodent
+
 go 1.18
 
 require (

@@ -1,3 +1,6 @@
+/*
+Copyright © 2022 mr-stringer
+*/
 package cmd
 
 import (
@@ -33,7 +36,7 @@ func CheckHealthFunc() {
 	if j1.Status == "ok" {
 		log.Infof("The status of endpoint '%s' is '%s'\n", ep, j1.Status)
 	} else {
-		log.Warnf("The status of the endpoint '%s' is not '%s\n'", j1.Status)
+		log.Warnf("The status of the endpoint '%s' is not '%s\n'", ep, j1.Status)
 	}
 }
 

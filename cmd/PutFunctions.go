@@ -1,3 +1,6 @@
+/*
+Copyright © 2022 mr-stringer
+*/
 package cmd
 
 import (
@@ -82,7 +85,7 @@ func (cbl *CallbackListener) HandleResult(CheckID string, wg *sync.WaitGroup) {
 func ExecuteCheckFunc() {
 	/*Check that we have a valid check ID*/
 	if !CheckIsValid() {
-		log.Fatalf("The check ID %s was not found in the runner.  For a list of valid IDs use the CheckCatalog subcommand")
+		log.Fatalf("The check ID %s was not found in the runner.  For a list of valid IDs use the CheckCatalog subcommand", checkID)
 	} else {
 		log.Debugf("Check ID %s is valid", checkID)
 	}

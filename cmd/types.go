@@ -1,3 +1,6 @@
+/*
+Copyright © 2022 mr-stringer
+*/
 package cmd
 
 import (
