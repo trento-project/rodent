@@ -27,6 +27,7 @@ func init() {
 	ExecuteAllChecksCmd.PersistentFlags().StringVarP(&hostToCheck, "hostToCheck", "t", "", "The host that the runner will execute the check on")
 	ExecuteAllChecksCmd.PersistentFlags().StringVarP(&provider, "provider", "p", "default", "The provider the the host runs on. default, aws, gcp and azure are the only supported values, default is the default")
 	ExecuteAllChecksCmd.PersistentFlags().IntVarP(&checkInterval, "checkInterval", "i", 5, "The pause between submitting check requests in seconds, default 5")
+	ExecuteAllChecksCmd.PersistentFlags().UintVar(&callbackPort, "callbackPort", 8000, "The port that the callback listener will use, the default value is 8000")
 
 	err := ExecuteAllChecksCmd.MarkPersistentFlagRequired("hostToCheck")
 	if err != nil {

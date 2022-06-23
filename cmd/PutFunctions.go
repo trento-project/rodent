@@ -149,7 +149,8 @@ func WebServer(cbl *CallbackListener) {
 	log.Debug("Starting WebServer")
 	callback := http.HandlerFunc(cbl.CallbackFunc)
 	http.Handle("/api/runner/callbacks", callback)
-	err := http.ListenAndServe(":8000", nil)
+	port := fmt.Sprintf(":%d", callbackPort)
+	err := http.ListenAndServe(port, nil)
 	if err != nil {
 		log.Warn("WebServer Crashed!")
 		log.Fatal(err.Error())

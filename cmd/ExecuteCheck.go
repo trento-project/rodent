@@ -9,6 +9,7 @@ import (
 )
 
 var hostToCheck, provider, checkID string
+var callbackPort uint
 
 // ExecuteCheckCmd represents the ExecuteCheck command
 var ExecuteCheckCmd = &cobra.Command{
@@ -28,6 +29,7 @@ func init() {
 	ExecuteCheckCmd.PersistentFlags().StringVarP(&hostToCheck, "hostToCheck", "t", "", "The host that the runner will execute the check on")
 	ExecuteCheckCmd.PersistentFlags().StringVarP(&checkID, "checkID", "c", "", "The ID of the check to be run")
 	ExecuteCheckCmd.PersistentFlags().StringVarP(&provider, "provider", "p", "default", "The provider the the host runs on. default, aws, gcp and azure are the only supported values")
+	ExecuteCheckCmd.PersistentFlags().UintVar(&callbackPort, "callbackPort", 8000, "The port that the callback listener will use, the default value is 8000")
 
 	err := ExecuteCheckCmd.MarkPersistentFlagRequired("hostToCheck")
 	if err != nil {
