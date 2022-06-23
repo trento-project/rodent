@@ -18,7 +18,7 @@ The final endpoint is '/execute', this endpoint is used to POST a request for a 
 
 ## Configuring the runner
 
-When testing the runner with rodent, the runner will need to be configured to send the callbacks to the IP address or hostname of the system where rodent is being executed.  It should be a simple case of running the trento runner with the command line arguments `runner start --callbacks-url <IP or hostname of rodent>`.
+When testing the runner with rodent, the runner will need to be configured to send the callbacks to the IP address or hostname of the system where rodent is being executed.  It should be a simple case of running the trento runner with the command line arguments `runner start --callbacks-url <IP or hostname of rodent>`.  If running a custom callback port (anything other than 8000) then the runner will need to be passed for full URL, for example if the callback port needs to be 4000 and the IP address of rodent is 172.16.1.5 the runner command should be `runner start --callbacks-url http://172.16.1.5:4000/api/runner/callback`
 
 ## Commands
 
@@ -55,13 +55,14 @@ The global flag `runner` must always be set so that rodent knows which runner to
 
 # Perform a single check.  Now the runner needs to target a host and a provider type.  The following example shows testing a system with the hostname 'test01' running on Azure.
 # Here the -t flag is used for the Target.  The -p flag sets the provider and -c sets the check ID
-./rodent -r test-runner ExecuteCheck -t test01 -p azure -c 21FCA6
+# Also, the callback port is specified as 4000 using the --callbackPort flag, if the callback port required is default 8000 this flag can be omitted.
+./rodent -r test-runner ExecuteCheck -t test01 -p azure -c 21FCA6 --callbackPort 4000
 # Output will be something like
 # INFO[0022] CheckID 21FCA6 state is 'passing'
 # Note that running CheckReady, CheckHealth and CheckCatalog will return very quickly but executing checks takes longer!
 
-# Perform all checks.  Again, the runner needs the host to test and a provider, we don't need a check ID when running all checks.
-./rodent --runner test-runner ExecuteAllChecks --hostToCheck test01 --provider azure
+# Perform all checks.  Again, the runner needs the host to test and a provider, we don't need a check ID when running all checks.  The --callbackPort only needs to be set if the runner is configured 
+./rodent --runner test-runner ExecuteAllChecks --hostToCheck test01 --provider azure --callbackPort 4000
 # Output will be similar to this:
 # INFO[0016] CheckID 156F64 state is 'passing'            
 # INFO[0022] CheckID 53D035 state is 'passing' 
