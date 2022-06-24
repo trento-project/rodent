@@ -149,7 +149,7 @@ func ExecuteAllChecksFunc() {
 func WebServer(cbl *CallbackListener) {
 	log.Debug("Starting WebServer")
 	callback := http.HandlerFunc(cbl.CallbackFunc)
-	http.Handle("/api/runner/callbacks", callback)
+	http.Handle(callbackUrl, callback)
 	port := fmt.Sprintf(":%d", callbackPort)
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
