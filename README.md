@@ -68,4 +68,6 @@ The global flag `runner` must always be set so that rodent knows which runner to
 # INFO[0022] CheckID 53D035 state is 'passing' 
 # INFO[0032] CheckID A1244C state is 'passing' 
 # <SNIP>
-```
+
+# In cases where the runner is set to a non-default callbacks url, the ExecuteCheck and ExecuteAllChecks commands can specify a custom URL.  This is done by specifying either --callbackUrl or -u followed by the custom url.
+./rodent -r test-runner ExecuteCheck -t test01 -p azure -c 21FCA6 --callbackPort 4000 --callbackUrl "/api/testurl"
