@@ -76,6 +76,7 @@ func (cbl *CallbackListener) HandleResult(CheckID string, wg *sync.WaitGroup) {
 			}
 		case <-time.After(time.Second * 60):
 			log.Error("The callback was not received within the timeout period")
+			wg.Done()
 			return
 		}
 	}
