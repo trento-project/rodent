@@ -18,7 +18,7 @@ The final endpoint is '/execute', this endpoint is used to POST a request for a 
 
 ## Configuring the runner
 
-When testing the runner with rodent, the runner will need to be configured to send the callbacks to the IP address or hostname of the system where rodent is being executed.  It should be a simple case of running the trento runner with the command line arguments `runner start --callbacks-url <IP or hostname of rodent>`.  If running a custom callback port (anything other than 8000) then the runner will need to be passed for full URL, for example if the callback port needs to be 4000 and the IP address of rodent is 172.16.1.5 the runner command should be `runner start --callbacks-url http://172.16.1.5:4000/api/runner/callback`
+When testing the runner with rodent, the runner will need to be configured to send the callbacks to the IP address or hostname of the system where rodent is being executed.  It should be a simple case of running the trento runner with the command line arguments `runner start --callbacks-url <IP or hostname of rodent>`.  If running a custom callback port (anything other than 8000) then the runner will need to be passed for full URL, for example if the callback port needs to be 4000 and the IP address of rodent is 172.16.1.5 the runner command should be `runner start --callbacks-url http://172.16.1.5:4000/api/runner/callbacks`
 
 ## Commands
 
