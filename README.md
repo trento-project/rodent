@@ -2,7 +2,7 @@
 
 The rodent project intends to provide isolated testing of the trento runner.  The runner itself has a large range of unit tests which help ensure the code works as designed.  The code is also often tested 'end-to-end', providing 'real-world' feedback.  
 
-The project intends to act as bridge between unit and end-to-end testing by allowing testing of the runner in a real environment without deploying the full trento stack.
+The project intends to act as bridge between unit and end-to-end testing by allowing testing of the runner in a real environment without deploying the full trento stack. 
 
 Rodent requires access to port 8080 of the runner and will listen on port 8000 for the callbacks.
 
