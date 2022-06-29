@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/google/uuid"
 )
@@ -81,4 +82,9 @@ func (c Callback) Print() {
 		os.Exit(1)
 	}
 	fmt.Print(string(cbj))
+}
+
+type ExecuteCatalog struct {
+	ExecuteMap map[uuid.UUID]string
+	sync.Mutex
 }
