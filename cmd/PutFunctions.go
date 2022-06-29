@@ -16,6 +16,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+var ec ExecuteCatalog
+
 type CallbackListener struct {
 	ch chan *Callback
 }
@@ -61,18 +63,33 @@ func (cbl *CallbackListener) HandleResult(CheckID string, wg *sync.WaitGroup) {
 					log.Fatalf("The runner '%s' could not reach the target host '%s'", runner, hostToCheck)
 
 				}
+
+				ec.Mutex.Lock()
+				/*Get the cid out of the map based on execution ID*/
+				cid, ok := ec.ExecuteMap[clbk.ExecutionID]
+				ec.Mutex.Unlock()
+				if !ok {
+					log.Fatalf("The executionID %v was not found in the ExecutionMap, cannot continue", clbk.ExecutionID)
+				}
+
+				log.Debugf("Found CheckID %s for executionID %v", cid, clbk.ExecutionID)
+
+				var reported = false
 				/*Find the check*/
 				for k := range clbk.Payload.Hosts[0].Results {
-					if clbk.Payload.Hosts[0].Results[k].Result != "skipped" {
+					if clbk.Payload.Hosts[0].Results[k].CheckID == cid {
 						/*Report the result*/
 						log.Infof("CheckID %s state is '%s'", clbk.Payload.Hosts[0].Results[k].CheckID, clbk.Payload.Hosts[0].Results[k].Result)
-						if clbk.Payload.Hosts[0].Results[k].Result != "passing" {
+						if clbk.Payload.Hosts[0].Results[k].Result != "passing" && clbk.Payload.Hosts[0].Results[k].Message != "" {
 							log.Infof("Message: '%s'", clbk.Payload.Hosts[0].Results[k].Message)
 						}
-
+						reported = true
 					}
 				}
 				wg.Done()
+				if !reported {
+					log.Warnf("The CheckID %s was not found in the response to executionID %v", cid, clbk.ExecutionID)
+				}
 			}
 		case <-time.After(time.Second * 60):
 			log.Error("The callback was not received within the timeout period")
@@ -186,6 +203,13 @@ func SingleCheck(CheckID string) {
 		},
 	}
 
+	ec.Lock()
+	if ec.ExecuteMap == nil {
+		ec.ExecuteMap = make(map[uuid.UUID]string)
+	}
+	ec.ExecuteMap[Event.ExecutionID] = CheckID
+	ec.Unlock()
+
 	/*Marshal the event to json*/
 	body, err := json.Marshal(Event)
 	if err != nil {
@@ -206,7 +230,6 @@ func SingleCheck(CheckID string) {
 	}
 
 	log.Debug(string(resData))
-
 }
 
 func CheckIsValid() bool {
