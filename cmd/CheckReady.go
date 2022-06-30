@@ -20,4 +20,5 @@ var CheckReadyCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(CheckReadyCmd)
+	CheckReadyCmd.PersistentFlags().StringVarP(&runner, "runner", "r", "", "trento runner to test (IP address or hostname)")
 }

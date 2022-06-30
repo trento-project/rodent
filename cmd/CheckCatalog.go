@@ -20,6 +20,7 @@ var CheckCatalogCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(CheckCatalogCmd)
+	CheckCatalogCmd.PersistentFlags().StringVarP(&runner, "runner", "r", "", "trento runner to test (IP address or hostname)")
 
 	// Here you will define your flags and configuration settings.
 

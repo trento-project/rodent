@@ -20,6 +20,7 @@ var CheckHealthCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(CheckHealthCmd)
+	CheckHealthCmd.PersistentFlags().StringVarP(&runner, "runner", "r", "", "trento runner to test (IP address or hostname)")
 
 	// Here you will define your flags and configuration settings.
 
