@@ -2,9 +2,9 @@
 
 The rodent project intends to provide isolated testing of the trento runner.  The runner itself has a large range of unit tests which help ensure the code works as designed.  The code is also often tested 'end-to-end', providing 'real-world' feedback.  
 
-The project intends to act as bridge between unit and end-to-end testing by allowing testing of the runner in a real environment without deploying the full trento stack. 
+The project intends to act as bridge between unit and end-to-end testing by allowing testing of the runner in a real environment without deploying the full trento stack.
 
-Rodent requires access to port 8080 of the runner and will listen on port 8000 for the callbacks.
+Rodent requires access to port 8080 of the runner and, by default, will listen on port 8000 for the callbacks, however, the callback can be varied.
 
 ## What will be tested?
 
@@ -29,22 +29,23 @@ rodent supports the following commands:
 * CheckCatalog - retrieves the endpoint '/catalog' and reports the status (optionally list the available checks)
 * ExecuteCheck - executes a single check, waits for the check to complete and reports the outcome
 * ExecuteAllChecks - executes all checks in the catalog and reports on the outcome
+* Version - prints the version of rodent
 
-The global flag `runner` must always be set so that rodent knows which runner to communicate with.  Below are some examples of running each command:
+For most commands the flag `runner` must be set so that rodent knows which runner to communicate with.  Below are some examples of running each command:
 
 ```bash
 # Check if the runner is ready, the hostname of our runner is 'test-runner'.  Runner is set as a global variable so is required before the 'CheckReady' command and can be expressed as '-r' or '--runner'
-./rodent -r test-runner CheckReady
+./rodent CheckReady -r test-runner
 # Output will be something like:
 # INFO[0000] The status of endpoint 'http://test-runner:8080/api/ready' is 'true'
 
 # Check health of the runner
-./rodent -r test-runner CheckHealth
+./rodent CheckHealth -r test-runner
 # Output will be something like
 # INFO[0000] The status of endpoint 'http://test-runner:8080/api/health' is 'ok'
 
 # Check health of the runner
-./rodent -r test-runner CheckCatalog
+./rodent CheckCatalog -r test-runner
 # Output will be something like
 # INFO[0000] Found 136 checks                             
 # INFO[0000] ID        Name
@@ -56,13 +57,13 @@ The global flag `runner` must always be set so that rodent knows which runner to
 # Perform a single check.  Now the runner needs to target a host and a provider type.  The following example shows testing a system with the hostname 'test01' running on Azure.
 # Here the -t flag is used for the Target.  The -p flag sets the provider and -c sets the check ID
 # Also, the callback port is specified as 4000 using the --callbackPort flag, if the callback port required is default 8000 this flag can be omitted.
-./rodent -r test-runner ExecuteCheck -t test01 -p azure -c 21FCA6 --callbackPort 4000
+./rodent ExecuteCheck -r test-runner -t test01 -p azure -c 21FCA6 --callbackPort 4000
 # Output will be something like
 # INFO[0022] CheckID 21FCA6 state is 'passing'
 # Note that running CheckReady, CheckHealth and CheckCatalog will return very quickly but executing checks takes longer!
 
 # Perform all checks.  Again, the runner needs the host to test and a provider, we don't need a check ID when running all checks.  The --callbackPort only needs to be set if the runner is configured 
-./rodent --runner test-runner ExecuteAllChecks --hostToCheck test01 --provider azure --callbackPort 4000
+./rodent ExecuteAllChecks -r test-runner --hostToCheck test01 --provider azure --callbackPort 4000
 # Output will be similar to this:
 # INFO[0016] CheckID 156F64 state is 'passing'            
 # INFO[0022] CheckID 53D035 state is 'passing' 
@@ -70,4 +71,7 @@ The global flag `runner` must always be set so that rodent knows which runner to
 # <SNIP>
 
 # In cases where the runner is set to a non-default callbacks url, the ExecuteCheck and ExecuteAllChecks commands can specify a custom URL.  This is done by specifying either --callbackUrl or -u followed by the custom url.
-./rodent -r test-runner ExecuteCheck -t test01 -p azure -c 21FCA6 --callbackPort 4000 --callbackUrl "/api/testurl"
+./rodent  ExecuteCheck -r test-runner -t test01 -p azure -c 21FCA6 --callbackPort 4000 --callbackUrl "/api/testurl"
+
+# The Version sub-command flag prints the version of runner.  The version is taken for the git tag and will be applied only when the release is created through github.  If the binary you are using reports 'development' as the version, then you do have probably compiled it yourself.  If you're looking for an offical binary, go to https://github.com/trento-project/rodent/releases
+```

@@ -24,6 +24,7 @@ var ExecuteAllChecksCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(ExecuteAllChecksCmd)
 	/*These flags already exist in 'ExecuteCheck' */
+	ExecuteAllChecksCmd.PersistentFlags().StringVarP(&runner, "runner", "r", "", "trento runner to test (IP address or hostname)")
 	ExecuteAllChecksCmd.PersistentFlags().StringVarP(&hostToCheck, "hostToCheck", "t", "", "The host that the runner will execute the check on")
 	ExecuteAllChecksCmd.PersistentFlags().StringVarP(&provider, "provider", "p", "default", "The provider the the host runs on. default, aws, gcp and azure are the only supported values, default is the default")
 	ExecuteAllChecksCmd.PersistentFlags().IntVarP(&checkInterval, "checkInterval", "i", 5, "The pause between submitting check requests in seconds, default 5")

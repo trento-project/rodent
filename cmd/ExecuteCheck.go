@@ -26,6 +26,7 @@ func init() {
 	rootCmd.AddCommand(ExecuteCheckCmd)
 
 	// Here you will define your flags and configuration settings.
+	ExecuteCheckCmd.PersistentFlags().StringVarP(&runner, "runner", "r", "", "trento runner to test (IP address or hostname)")
 	ExecuteCheckCmd.PersistentFlags().StringVarP(&hostToCheck, "hostToCheck", "t", "", "The host that the runner will execute the check on")
 	ExecuteCheckCmd.PersistentFlags().StringVarP(&checkID, "checkID", "c", "", "The ID of the check to be run")
 	ExecuteCheckCmd.PersistentFlags().StringVarP(&provider, "provider", "p", "default", "The provider the the host runs on. default, aws, gcp and azure are the only supported values")

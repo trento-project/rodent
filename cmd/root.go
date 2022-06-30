@@ -57,12 +57,7 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.rodent.yaml)")
-	rootCmd.PersistentFlags().StringVarP(&runner, "runner", "r", "", "trento runner to test (IP address or hostname)")
 	rootCmd.PersistentFlags().BoolVarP(&debug, "debug", "v", false, "when true, turns of debug logging")
-	err := rootCmd.MarkPersistentFlagRequired("runner")
-	if err != nil {
-		log.Fatal(err.Error())
-	}
 
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.

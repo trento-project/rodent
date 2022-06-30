@@ -1,12 +1,23 @@
+VERSION ?= $(shell ./tools/get_version_from_git.sh)
+DIRTY = ?= $(shell ./tools/get_dirty.sh)
+LDFLAGS = -X github.com/trento-project/rodent/cmd.version="$(VERSION)"
 BINARY_NAME=rodent
-ARCHS ?= amd64 arm64 ppc64le s390x
+GO_BUILD = CGO_ENABLED=0 go build -o $(BINARY_NAME) -ldflags "$(LDFLAGS)"
+
 
 .PHONY: default
 default: clean mod-tidy fmt vet-check build
 
 .PHONY: build
 build:
-	go build -o ${BINARY_NAME}
+	$(info Building version $(VERSION))
+	$(info Checking that git is clean)
+ifeq ($(DIRTY), dirty)
+	$(error There are uncomitted changes.  Either commit and try again, or build manually)
+else
+			$(GO_BUILD)
+endif
+
 
 .PHONY: clean
 clean:
