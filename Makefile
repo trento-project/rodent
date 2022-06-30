@@ -1,6 +1,6 @@
 VERSION ?= $(shell ./tools/get_version_from_git.sh)
-DIRTY ?= $(shell ./tools/get_dirty.sh)
-LDFLAGS = -X cmd/Version.version="$(VERSION)"
+DIRTY = ?= $(shell ./tools/get_dirty.sh)
+LDFLAGS = -X github.com/trento-project/rodent/cmd.version="$(VERSION)"
 BINARY_NAME=rodent
 GO_BUILD = CGO_ENABLED=0 go build -o $(BINARY_NAME) -ldflags "$(LDFLAGS)"
 
