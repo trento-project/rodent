@@ -18,8 +18,12 @@ jobs:
     - name: Build the Docker image
       run: docker build -t ghcr.io/${{ github.repository_owner }}/rodent:latest .
 
-    - name: docker login
-      run: echo ${{ secrets.ACTIONSECRET }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Login to GitHub Container Registry
+    - uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push image to github registry
       run:  docker push ghcr.io/${{ github.repository_owner }}/rodent:latest
