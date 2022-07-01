@@ -15,10 +15,13 @@ jobs:
         go-version: 1.18
     - name: build
       run: make
-    - uses: actions/upload-artifact@v3
+    - uses: "marvinpinto/action-automatic-releases@1.2.1"
       with:
-        name: rodent
-        path: rodent
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
+        files: |
+          rodent
+
 
 
 
