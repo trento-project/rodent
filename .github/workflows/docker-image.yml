@@ -10,14 +10,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build -t ghcr.io/${{ GITHUB_REPOSITORY_OWNER }}/rodent:latest .
+      run: docker build -t ghcr.io/${{ github.repository_owner }}/rodent:latest .
     - uses: docker/login-action@v2
       with:
         registry: ghcr.io
-        username: ${{ GITHUB_ACTOR }}
+        username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
     - name: Push image to github registry
-      run:  docker push ghcr.io/${{ GITHUB_REPOSITORY_OWNER }}/rodent:latest
+      run:  docker push ghcr.io/${{ github.repository_owner }}/rodent:latest
 
 
 
