@@ -55,7 +55,9 @@ func (cbl *CallbackListener) HandleResult(CheckID string, wg *sync.WaitGroup) {
 			case clbk.Event == "execution_completed":
 				/*We only expect one host, make sure that's all we have*/
 				if len(clbk.Payload.Hosts) != 1 {
-					log.Fatal("More than 1 host in the returned payload. This is unexpected")
+					log.Error("More than 1 host in the returned payload. This is unexpected.  Dumping JSON")
+					clbk.Print()
+					log.Fatal("Expected only one host in the callback but got %d.  Rodent doesn't currently handle this", len(clbk.Payload.Hosts))
 				}
 				/*Ensure the host was reachable*/
 				if !clbk.Payload.Hosts[0].Reachable {
