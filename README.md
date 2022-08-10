@@ -20,6 +20,60 @@ The final endpoint is '/execute', this endpoint is used to POST a request for a 
 
 When testing the runner with rodent, the runner will need to be configured to send the callbacks to the IP address or hostname of the system where rodent is being executed.  It should be a simple case of running the trento runner with the command line arguments `runner start --callbacks-url <IP or hostname of rodent>`.  If running a custom callback port (anything other than 8000) then the runner will need to be passed for full URL, for example if the callback port needs to be 4000 and the IP address of rodent is 172.16.1.5 the runner command should be `runner start --callbacks-url http://172.16.1.5:4000/api/runner/callbacks`
 
+## Add rodent to a running Trento environment
+The github action **Docker Image CI** is creating a new docker image on every pull request merge.
+These docker image can be find under
+
+`ghcr.io/trento-project/rodent:latest`
+
+The following yaml file will create a new pod  with the name **trento-server-rodent** inside of trento:
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+   name: trento-server-rodent
+   labels:
+     app.kubernetes.io/instance: trento-server
+     app.kubernetes.io/name: rodent
+spec:
+   containers:
+   - name: rodent-pod
+     image: ghcr.io/trento-project/rodent:latest
+     ports:
+     - containerPort: 4000
+     command: [ "/bin/sh", "-c", "--" ]
+     args: [ "while true; do sleep 30; done;" ]
+```
+
+
+It can be deployed by running:
+
+`kubectl apply -f create-rodent.yaml`
+
+
+To redirect the check results from trento-server-web to the new created **trento-server-rodent** pod the following commands are needed:
+
+`kubectl patch svc trento-server-web --type merge -p '{"spec":{"selector":{"app.kubernetes.io/name": "rodent"}}}'` \
+`kubectl patch svc trento-server-web --type merge -p '{"spec":{"ports": [{"port":4000,"targetPort":4000}]}}'`
+
+
+After that change the web GUI is not longer able to execute the checks. It is however now possibe to run
+the checks via rodent:
+
+Examples:
+
+`kubectl exec -it trento-server-rodent -- /bin/bash -c  '/rodent -r trento-server-runner ExecuteCheck -t trento-client01 -p gcp -c 373DB8 --callbackPort 4000 --callbackUrl "/api/runner/callback" -v'` \
+`kubectl exec -it trento-server-rodent -- /bin/bash -c  '/rodent -r trento-server-runner ExecuteAllChecks -t trento-client01 -p gcp --callbackPort 4000 --callbackUrl "/api/runner/callback" -v'`
+
+
+The following two commands will set everything back to trento-server-web:
+
+`kubectl patch svc trento-server-web --type merge -p '{"spec":{"ports": [{"port":4000,"targetPort":"http"}]}}'` \
+`kubectl patch svc trento-server-web --type merge -p '{"spec":{"selector":{"app.kubernetes.io/name": "web"}}}'`
+
+
+
 ## Commands
 
 rodent supports the following commands:
